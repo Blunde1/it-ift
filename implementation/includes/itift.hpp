@@ -5,6 +5,7 @@
 //{
 /*#include "includes/optimization.hpp"*/
 #include "complex.hpp" 
+#include "quadrature_integration.hpp"
 /*#include "includes/differentials.hpp" 
 #include "includes/generating_functions.hpp"
 #include "includes/saddlepoint_approximation.hpp"
