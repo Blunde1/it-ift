@@ -1,7 +1,10 @@
-
 #ifndef __QUADRATURE_INTEGRATION_HPP_INCLUDED__
 #define __QUADRATURE_INTEGRATION_HPP_INCLUDED__
 
+
+/**
+ * Numerical Recipes in C - Chapter 4.5
+ */
 
 // Gauss-Laguerre quadrature weigts and absciasses
 template<class Type>
