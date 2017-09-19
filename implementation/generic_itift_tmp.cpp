@@ -127,7 +127,7 @@ struct log_cf{
     Type x0, dt;
     vector<Type> p, p_jump;
     int process, scheme, jump;
-    logcf_f(Type x0_, Type dt_, vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
+    log_cf(Type x0_, Type dt_, vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
         x0(x0_), dt(dt_), p(p_), p_jump(p_jump_), process(process_), scheme(scheme_), jump(jump_) {}
     template <class T>
     cType<T> operator()(const cType<T>& s, const T& x0) {
@@ -146,13 +146,48 @@ struct log_cf{
 /* 2. 2.  */
 
 /* objective function */
+template<class Type>
 Type objective_function<Type>::operator()(){
     
+    // Data
     DATA_VECTOR(Xt)
     DATA_SCALAR(dt);
+    DATA_INTEGER(process);
+    DATA_INTEGER(scheme);
+    DATA_INTEGER(jump);
+    DATA_INTEGER(ghiter);
     
-    PARAMETER_VECTOR(par_diff);
-    PARAMETER_VECTOR(par_jump);
+    // Parameters
+    PARAMETER_VECTOR(par);
     
-    return 0;
+    int obs=Xt.size(), j;
+    Type nll = 0, fx;
+    
+    // Construct par_diff and par_jump
+    // par_jump: last three parameters of par
+    vector<Type> par_jump(3), par_diff;
+    int par_length = par.size();
+    if(jump!=0){
+        par_jump << par[par_length-3], par[par_length-2], par[par_length-1];
+        for(j=0; j<(par_length-3); j++){
+            par_diff[j] = par[j];
+        }
+    }else{
+        par_diff = par;
+    }
+    
+    // Gauss-Hermite quadrature rules
+    matrix<Type> rules(ghiter,2);
+    rules = gauss_hermite_quad(rules);
+    
+    // Constructing the log characteristic
+    log_cf<Type> lcf(Xt[0], dt, par_diff, par_jump, process, scheme, jump);
+    
+    // Inversion and build nll
+    for(j=1; j<obs; j++){
+        fx = ift_gauher(Xt[j], Xt[j-1], lcf, rules);
+        nll -= log(fx);
+    }
+    
+    return nll;
 }
