@@ -1,0 +1,64 @@
+% Appendix A
+
+\section{Multiple Itô Integrals}
+\label{AppendixA}
+%\lhead{Appendix A. \emph{Itô Integrals}}
+
+The evaluations of the integrals \eqref{Chap4.1 ito integrals} involved in the development of the discretization schemes in section \ref{Chap4.1} were presented without proofs.
+For the non-trivial ones, we here show how they can be calculated.
+
+
+The first integral of concern is the integral $I_{1,0}$.
+The calculation involves using the Fubini theorem for stochastic integrals (see e.g. \citet[ p.~477]{bjork2009arbitrage}) for switching the order of integration:
+\begin{align}\label{App: I1}
+I_{1,0}&=\int_0^t \int_0^{s_1}dW_{s_2}ds_1
+=\int_0^t W_{s_1}ds_1\notag\\
+&=\int_0^t \int_{0}^{t} \mathbbm{1}_{[0,s_1]}(s_2)dW_{s_2}ds_1%\notag\\
+=\int_0^t \int_0^t \mathbbm{1}_{[0,s_1]}(s_2)ds_1dW_{s_2}\notag\\
+&=\int_0^t t-s_2dW_{s_2}%\notag\\
+\sim N\left(0,\int_0^t(t-s_2)^2ds_2 \right)\notag\\
+&\sim N\left( 0,\frac{1}{3}t^3 \right).
+\end{align}
+The second integral of interest is the integral $I_{0,1}$.
+We here wish to show that the equation $I_{0,1}=tJ_1-J_2$, where $J_1$ and $J_2$ are as defined in section \ref{Chap4.1}, is valid.
+Define $Y$ by $Y_t=tW_t$.
+Then we have $Y_t = f\left(t,X_t\right)$, where $f(t,x)=tx$, $X_t=W_t$, and $Y_0=0$.
+The partial derivatives are $\frac{\partial f}{\partial t}=x$, $\frac{\partial f}{\partial x}=t$, and $\frac{\partial^2 f}{\partial^2 x}=0$.
+We also trivially have $dX = dW$.
+Itô's lemma then gives
+\begin{align}
+dY=W_tdt + tdW_t,
+\end{align}
+which in integral form yields
+\begin{align}
+tW_t=Y_t&=\int_0^tW_sds + \int_0^t sdW_s=W_t + \int_{0}^{t}sdW_s.
+\end{align}
+From this we see that the equation holds.
+
+The third and final integral, $I_{1,1}$, is commonly used as an example to illustrate the Itô integral and can be found in most textbooks on the subject.
+It can of course be computed directly from the definition, but also via an application of Itô's lemma, similar to that of $I_{0,1}$.
+We first calculate the inner integral, and then we follow \cite{bjork2009arbitrage} and the application of Itô's lemma found there:
+\begin{align}
+I_{1,1}&=\int_0^t \int_0^{s_1} dW_{s_2}dW_{s_1}= \int_0^t W_{s_1}dW_{s_1}.
+\end{align}
+Define $Y_t=W_t^2$, then $Y_0=0$ and $Y$ can be written as $Y_t=f(t,X_t)$, where $X_t=W_t$ and $f$ is a function such that $f(t,x)=x^2$.
+The partial derivatives of $f$ are $\frac{\partial f}{\partial t}=0$, $\frac{\partial f}{\partial x}=2x$, and $\frac{\partial^2 f}{\partial^2 x}=2$.
+From Itô's lemma we then have
+\begin{align}
+dY_t&=2XdX + \frac{1}{2}2(dX)^2=dt + 2W_tdW_t,
+\end{align}
+since $dX=dW$.
+In integral form this reads
+\begin{align}
+W_t^2=Y_t=t + 2\int_0^t W_sdW_s,
+\end{align}
+which trivially implies that $I_{1,1}=\frac{1}{2}\left( J_1^2 - t \right)$.
+
+Our final consideration is the covariance between $J_1$ and $J_2$,
+\begin{align}
+Cov(J_1,J_2)&=Cov\left( W_t, \int_0^t W_s ds \right)=Cov\left( \int_0^tdW_s,\int_0^t \int_0^{s_1} dW_{s_2}ds_1  \right).
+\end{align}
+Applying the Fubini theorem as for $I_{1,0}$ \eqref{App: I1}, and by the properties of the Itô integral \eqref{Chap2.1 Ito integral}, we obtain
+\begin{align}
+Cov(J_1,J_2)&=Cov\left( \int_0^tdW_s,\int_0^t (t-s)dW_s  \right)=\int_0^t 1*(t-s)ds=\frac{1}{2}t^2.
+\end{align}
