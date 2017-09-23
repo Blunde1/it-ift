@@ -21,5 +21,5 @@ OU_process <- function(T,N,kappa,alpha,sigma,x0,seed){
     }
     return(x);
 }
-test<-OU_process(10,1000,2,1,1,3,1)
-plot(test,type="l")
+#test<-OU_process(10,1000,2,1,1,3,1)
+#plot(test,type="l")
