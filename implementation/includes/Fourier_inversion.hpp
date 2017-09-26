@@ -2,6 +2,8 @@
 #ifndef __FOURIER_INVERSION_HPP_INCLUDED__
 #define __FOURIER_INVERSION_HPP_INCLUDED__
 
+#include "complex.hpp"
+
 /** Gauss hermite fourier transfomr from lcf to density. lcf takes s, ls0, v0, as argument
  */
 template<class Type, class Functor>

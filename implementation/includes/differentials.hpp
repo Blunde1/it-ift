@@ -1,0 +1,52 @@
+
+#ifndef __differentials_hpp_included__
+#define __differentials_hpp_included__
+
+/* differentials diffusion */
+template<class Type>
+vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, vector<Type> p_jump, int process_type){
+    
+    /**
+     * Returns derivatives of order 0-2 w.r.t. x0 for the drift and diffusion 
+     * coefficients of a time homogeneous diffusion process.
+     * x0: value of diffusion at time t.
+     * dt: timestep between observations.
+     * p: parameter vector.
+     * process_type: integer to specify the diffusion process. 
+     */
+    
+    /* Parameter names */
+    Type kappa, alpha, sigma, delta;
+    
+    /* Differentials w.r.t. x0 */
+    Type drift, drift_1, drift_2, diffusion, diffusion_1, diffusion_2;
+    
+    /* Return vector - holds value of differentials */
+    vector<Type> deriv(6);
+    
+    switch(process_type)
+    {
+    case 1: 
+        /* Geometric Brownian Motion */
+        kappa = p[0], sigma = p[1];
+        drift = kappa * x0, diffusion = sigma*x0;
+        drift_1 = kappa, diffusion_1 = sigma;
+        drift_2 = 0, diffusion_2 = 0;
+        break;
+    case 2:
+        /* log GBM */
+        kappa = p[0], sigma=p[1];
+        drift = kappa - 0.5*sigma*sigma;
+        drift_1 = 0, drift_2 = 0;
+        diffusion = sigma;
+        diffusion_1 = 0, diffusion_2 = 0;
+        break;
+    }
+    
+    deriv[0]=drift,    deriv[1]=drift_1,    deriv[2]=drift_2;
+    deriv[3]=diffusion, deriv[4]=diffusion_1, deriv[5]=diffusion_2;
+    return deriv;
+    
+}
+
+#endif // __differentials_hpp_included__
