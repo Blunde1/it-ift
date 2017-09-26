@@ -67,12 +67,12 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, vector<T
 template<class Type>
 struct log_cf{
     
-    Type dt, x0;
+    Type x0, dt;
     vector<Type> p, p_jump;
     int process, scheme, jump;
     
-    log_cf(Type dt_, Type x0_, vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
-        dt(dt_), x0(x0_), p(p_), p_jump(p_jump_), process(process_), scheme(scheme_), jump(jump_) {}
+    log_cf(Type x0_, Type dt_,  vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
+        x0(x0_), dt(dt_), p(p_), p_jump(p_jump_), process(process_), scheme(scheme_), jump(jump_) {}
     
     void set_x0(Type x0) { this -> x0 = x0; }
     
