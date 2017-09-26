@@ -19,9 +19,9 @@ for(i in 1:length(x)){
     obj <- MakeADFun(data,param)
     f[i] <- obj$fn(obj$par)
 }
-with(param,plot(x,dnorm(x,mu,sigma),type="l"))
-lines(x,f, lty=3,col="red")
 exact <- with(param, dnorm(x,mu,sigma))
+plot(x,exact,type="l")
+lines(x,f, lty=3,col="red")
 plot(x,abs(log(exact)-log(f)),type="l")
 
 dyn.unload(dynlib("normal_ift"))

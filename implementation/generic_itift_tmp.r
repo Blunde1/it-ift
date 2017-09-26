@@ -12,23 +12,45 @@ dyn.load(dynlib("generic_itift_tmp"))
 
 # Simulate data
 simulate = TRUE
+GBM <- TRUE
+OU <- FALSE
 if(simulate){
-    source("simulation/Simulation_GBM.R")
-    set.seed(123)
-    time = 10
-    N=250*time
-    mu = 0.1
-    sigma = 0.05
-    x0 = 1
-    dt <- time / N
-    seed = 123
-    X <- GBM_process(time, N, mu, sigma, x0, seed)
-    plot(X, type="l", main="Simulated GBM")
+    if(GBM){
+        source("simulation/Simulation_GBM.R")
+        set.seed(123)
+        time = 10
+        N=250*time
+        mu = 0.1
+        sigma = 0.05
+        x0 = 1
+        dt <- time / N
+        seed = 123
+        X <- log(GBM_process(time, N, mu, sigma, x0, seed))
+        plot(X, type="l", main="Simulated GBM")
+        param <<- list( par = c(mu, sigma) )
+        process <- 2
+    }
+    if(OU){
+        source("simulation/Simulation_OU.R")
+        set.seed(123)
+        time = 30
+        N=250*time
+        dt = time / N
+        kappa=2
+        alpha=1
+        sigma=1
+        x0=3
+        seed=123
+        X <- OU_process(time,N,kappa,alpha,sigma,x0,seed)
+        plot(X,type="l", main="Simulated OU")
+        param <- list(par=c(kappa,alpha,sigma))
+        process=3
+    }
 }
 
 # Construct TMB object
-data <- list(Xt=log(X), dt=dt, process=2, scheme=1, jump=0, ghiter=150)
-param <- list( par = c(0.2, 0.2) )
+data <- list(Xt=X, dt=dt, process=process, scheme=1, jump=0, ghiter=30)
+#param <- list( par = c(0.2, 0.2) )
 obj <- MakeADFun(data, param)
 
 # test
@@ -48,8 +70,8 @@ nll_r <- function(par, X, dt){
     }
     return(nll)
 }
-nll_r(c(mu,sigma), log(X), dt)
-opt_r <- nlminb(c(mu,sigma),nll_r, X=log(X), dt=dt)
+nll_r(c(mu,sigma), X, dt)
+opt_r <- nlminb(c(mu,sigma),nll_r, X=X, dt=dt)
 opt_r
 
 # Optimise

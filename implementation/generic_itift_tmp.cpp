@@ -5,6 +5,7 @@
  */
 
 #include<TMB.hpp>
+#include <fenv.h>
 
 /* include cType */
 #include "includes/itift.hpp"
@@ -47,6 +48,13 @@ vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, vector<Type> p
         drift_1 = 0, drift_2 = 0;
         diffusion = sigma;
         diffusion_1 = 0, diffusion_2 = 0;
+        break;
+    case 3:
+        /* Ornstein-Uhlenbeck process */
+        kappa = p[0], alpha=p[1], sigma=p[2];
+        drift = kappa * (alpha - x0), diffusion = sigma;
+        drift_1 = -kappa, diffusion_1 = 0, drift_2 = 0, diffusion_2 = 0;
+        break;
     }
     
     deriv[0]=drift,    deriv[1]=drift_1,    deriv[2]=drift_2;
@@ -82,8 +90,8 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, vector<T
     case 2:
         /* Milstein */
         c_1=diffusion, c_2=0.5*diffusion*diffusion_1, c_3=dt*(drift-c_2);
-        lcf_RS = (-c_1*c_1*s*s*dt) / ((Type)2 - ((Type)4)*i*s*c_2*dt  );// -
-        //((Type)0.5)*log((Type)1 - ((Type)2)*dt*c_2*s*i);
+        lcf_RS = (-c_1*c_1*s*s*dt) / ((Type)2 - ((Type)4)*i*s*c_2*dt  ) -
+            ((Type)0.5)*log((Type)1 - ((Type)2)*dt*c_2*s*i);
         lcf = lcf_RS + (i*s*(x0+c_3));
         break;
     case 3:
@@ -130,11 +138,12 @@ struct log_cf{
     log_cf(Type x0_, Type dt_, vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
         x0(x0_), dt(dt_), p(p_), p_jump(p_jump_), process(process_), scheme(scheme_), jump(jump_) {}
     template <class T>
-    cType<T> operator()(const cType<T>& s, const T& x0) {
+    cType<T> operator()(const cType<T>& s, const T& x0_) {
+        // Should perhaps implement "get_x0" function
         T dt_ = T(dt);
         vector<T> p_ = p.template cast<T>();
         vector<T> p_jump_ = p.template cast<T>();
-        cType<T> lcf = log_cf_fun(s, x0, dt_, p_, p_jump_, (int)process, (int)scheme, (int)jump);
+        cType<T> lcf = log_cf_fun(s, x0_, dt_, p_, p_jump_, (int)process, (int)scheme, (int)jump);
         //cType<Type> lcf = log_cf_fun(s, x0_, (Type)dt, (vector<Type>)p, (vector<Type>)p_jd (int)process, (int)scheme, (int)jump);
         return lcf;
     }
@@ -148,6 +157,8 @@ struct log_cf{
 /* objective function */
 template<class Type>
 Type objective_function<Type>::operator()(){
+    
+    feenableexcept(FE_INVALID | FE_OVERFLOW | FE_DIVBYZERO | FE_UNDERFLOW); 
     
     // Data
     DATA_VECTOR(Xt)
