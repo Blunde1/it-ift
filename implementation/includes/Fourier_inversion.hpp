@@ -23,7 +23,7 @@ Type ift_gauher(Type x, Functor f, matrix<Type> rules){
 /** Gauss laguerre fourier transformation from logarithmich characteristic function to density function 
  */
 template<class Type, class Functor>
-Type ift_gulag(Type x, Functor f, matrix<Type> quadRules){
+Type ift_gaulag(Type x, Functor f, matrix<Type> quadRules){
     cType<Type> i(0,1);
     Type sum = 0; 
     int n = quadRules.rows();
