@@ -10,7 +10,7 @@ template<class Type>
 cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int process_type, int scheme, int jump){
     
     // Differentials
-    vector<Type> deriv = differentials_diff(x0, dt, p, p_jump, process_type);
+    vector<Type> deriv = differentials_diff(x0, dt, p, process_type);
     Type drift, drift_1, drift_2, diffusion, diffusion_1, diffusion_2;
     drift = deriv[0], drift_1=deriv[1], drift_2=deriv[2];
     diffusion=deriv[3], diffusion_1=deriv[4], diffusion_2=deriv[5];
@@ -46,16 +46,17 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int proc
     }
     
     // Adding jumps
+    int p_size = p.size();
     switch(jump){
     case 0:
         lcf = lcf; // Nothing happens
         break;
     case 1: // Normally distirbuted jumps
-        lambda = p_jump[0], mu = p_jump[1], nu = p_jump[2];
+        lambda = p[p_size-3], mu = p[p_size-2], nu = p[p_size-1];
         lcf = lcf + lambda*dt*(exp(s*i*mu - ((Type)0.5)*nu*nu*s*s)- (Type)1);
         break;
     case 2: // Gamma distributed jumps
-        lambda = p_jump[0], mu = p_jump[1], nu = p_jump[2];
+        lambda = p[p_size-3], mu = p[p_size-2], nu = p[p_size-1];
         // mu>0: shape, nu>0: scale
         lcf = lcf + lambda*dt*(pow(((Type)1 - nu*i*s), -mu) - (Type)1);
     }

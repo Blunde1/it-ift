@@ -4,7 +4,7 @@
 
 /* differentials diffusion */
 template<class Type>
-vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, vector<Type> p_jump, int process_type){
+vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, int process_type){
     
     /**
      * Returns derivatives of order 0-2 w.r.t. x0 for the drift and diffusion 
