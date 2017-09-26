@@ -7,7 +7,7 @@
 
 /* log_cf function */
 template<class Type>
-cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, vector<Type> p_jump, int process_type, int scheme, int jump){
+cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int process_type, int scheme, int jump){
     
     // Differentials
     vector<Type> deriv = differentials_diff(x0, dt, p, p_jump, process_type);
@@ -71,8 +71,8 @@ struct log_cf{
     vector<Type> p, p_jump;
     int process, scheme, jump;
     
-    log_cf(Type x0_, Type dt_,  vector<Type> p_, vector<Type> p_jump_, int process_, int scheme_, int jump_) :
-        x0(x0_), dt(dt_), p(p_), p_jump(p_jump_), process(process_), scheme(scheme_), jump(jump_) {}
+    log_cf(Type x0_, Type dt_,  vector<Type> p_, int process_, int scheme_, int jump_) :
+        x0(x0_), dt(dt_), p(p_), process(process_), scheme(scheme_), jump(jump_) {}
     
     void set_x0(Type x0) { this -> x0 = x0; }
     
@@ -81,8 +81,7 @@ struct log_cf{
         T dt_ = T(dt);
         T x0_ = T(x0);
         vector<T> p_ = p.template cast<T>();
-        vector<T> p_jump_ = p_jump.template cast<T>();
-        cType<T> lcf = log_cf_fun(s, x0_, dt_, p_, p_jump_, (int)process, (int)scheme, (int)jump);
+        cType<T> lcf = log_cf_fun(s, x0_, dt_, p_, (int)process, (int)scheme, (int)jump);
         return lcf;
     }
 };

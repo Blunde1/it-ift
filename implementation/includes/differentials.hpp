@@ -17,6 +17,7 @@ vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, vector<Type> p
     
     /* Parameter names */
     Type kappa, alpha, sigma, delta;
+    Type lambda, mu, nu, k;
     
     /* Differentials w.r.t. x0 */
     Type drift, drift_1, drift_2, diffusion, diffusion_1, diffusion_2;
