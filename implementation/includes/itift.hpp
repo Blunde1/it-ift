@@ -6,5 +6,6 @@
 #include "generating_functions.hpp"
 #include "quadrature_integration.hpp"
 #include "Fourier_inversion.hpp"
+#include "saddlepoint_approximation.hpp"
 
 #endif // __ITIFT_HPP_INCLUDED__
