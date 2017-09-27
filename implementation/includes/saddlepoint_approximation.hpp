@@ -30,7 +30,7 @@ struct spa_iprob{
  * input: saddlepoint, inner_problem, gird point
  */
 template<class Type, class Functor>
-Type lspa(Functor inner_problem, vector<Type> s, Type x) {
+Type lspa(Functor inner_problem, vector<Type> s) {
     matrix<Type> H = autodiff::hessian(inner_problem, s); // Has dim = 1
     Type lspa = inner_problem(s) - log(sqrt(2*M_PI*exp(atomic::logdet(H))));
     return lspa;
