@@ -87,4 +87,13 @@ struct log_cf{
     }
 };
 
+/* CGF function */
+template<class Type>
+cgf_fun(Type s, Type x0, Type dt, vector<Type> p, int process_type, int scheme, int jump){
+    cType<Type> i(0,1);
+    Type cgf = log_cf_fun(-i*s, x0, dt, p, process_type, scheme, jump).r;
+    return cgf;
+}
+
+
 #endif //__generating_functions_hpp_included__
