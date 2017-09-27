@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 Berent Lunde
 
 #ifndef __SADDLEPOINT_APPROXIMATION_HPP_INCLUDED__
 #define __SADDLEPOINT_APPROXIMATION_HPP_INCLUDED__
@@ -31,7 +32,7 @@ struct spa_iprob{
  */
 template<class Type, class Functor>
 Type lspa(Functor inner_problem, vector<Type> s) {
-    matrix<Type> H = autodiff::hessian(inner_problem, s); // Has dim = 1
+    matrix<Type> H = autodiff::hessian(inner_problem, s); // Hessian of inner problem equals that of the cgf
     Type lspa = inner_problem(s) - log(sqrt(2*M_PI*exp(atomic::logdet(H))));
     return lspa;
 }

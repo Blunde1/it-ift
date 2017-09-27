@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 Berent Lunde
 
 #ifndef __generating_functions_hpp_included__
 #define __generating_functions_hpp_included__

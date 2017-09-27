@@ -1,4 +1,4 @@
-// 2016 Berent Lunde
+// Copyright (C) 2016-2017 Berent Lunde
 
 /**
 * Makes the following available for the TMB user:

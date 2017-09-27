@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 Berent Lunde
 
 #ifndef __FOURIER_INVERSION_HPP_INCLUDED__
 #define __FOURIER_INVERSION_HPP_INCLUDED__

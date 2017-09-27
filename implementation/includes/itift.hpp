@@ -1,3 +1,5 @@
+// Copyright (C) 2016-2017 Berent Lunde
+
 #ifndef __ITIFT_HPP_INCLUDED__
 #define __ITIFT_HPP_INCLUDED__
 

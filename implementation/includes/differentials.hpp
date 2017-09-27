@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 Berent Lunde
 
 #ifndef __differentials_hpp_included__
 #define __differentials_hpp_included__
