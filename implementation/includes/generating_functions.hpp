@@ -13,8 +13,8 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int proc
     // Differentials
     vector<Type> deriv = differentials_diff(x0, dt, p, process_type);
     Type drift, drift_1, drift_2, diffusion, diffusion_1, diffusion_2;
-    drift = deriv[0], drift_1=deriv[1], drift_2=deriv[2];
-    diffusion=deriv[3], diffusion_1=deriv[4], diffusion_2=deriv[5];
+    drift = deriv(0), drift_1=deriv(1), drift_2=deriv(2);
+    diffusion=deriv(3), diffusion_1=deriv(4), diffusion_2=deriv(5);
     
     // Jump parameters
     Type lambda, mu, nu;
@@ -90,7 +90,7 @@ struct log_cf{
 
 /* CGF function */
 template<class Type>
-cgf_fun(Type s, Type x0, Type dt, vector<Type> p, int process_type, int scheme, int jump){
+Type cgf_fun(Type s, Type x0, Type dt, vector<Type> p, int process_type, int scheme, int jump){
     cType<Type> i(0,1);
     Type cgf = log_cf_fun(-i*s, x0, dt, p, process_type, scheme, jump).r;
     return cgf;

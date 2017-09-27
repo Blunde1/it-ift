@@ -9,5 +9,6 @@
 #include "quadrature_integration.hpp"
 #include "Fourier_inversion.hpp"
 #include "saddlepoint_approximation.hpp"
+#include "optimization.hpp"
 
 #endif // __ITIFT_HPP_INCLUDED__

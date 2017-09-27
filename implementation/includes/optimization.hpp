@@ -4,14 +4,14 @@
 #define __OPTIMIZATION_HPP_INCLUDED__
 
 template<class Type, class Functor>
-vector<Type> newton_local_extrema(Functor f, vector<Type> s, int niter) {
+Type newton_local_extrema(Functor f, vector<Type> s, int niter) {
     //Min/maximize f
     for (int i = 0; i<niter; i++) {
         vector<Type> g = autodiff::gradient(f, s); 
         matrix<Type> H = autodiff::hessian(f, s); 
         s -= atomic::matinv(H) * g;
     }
-    return s;
+    return s(0);
 }
 
 template<class Type, class Functor>

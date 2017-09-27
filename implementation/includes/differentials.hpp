@@ -30,23 +30,23 @@ vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, int process_ty
     {
     case 1: 
         /* Geometric Brownian Motion */
-        kappa = p[0], sigma = p[1];
+        kappa = p(0), sigma = p(1);
         drift = kappa * x0, diffusion = sigma*x0;
         drift_1 = kappa, diffusion_1 = sigma;
-        drift_2 = 0, diffusion_2 = 0;
+        drift_2 = Type(0), diffusion_2 = Type(0);
         break;
     case 2:
         /* log GBM */
-        kappa = p[0], sigma=p[1];
-        drift = kappa - 0.5*sigma*sigma;
-        drift_1 = 0, drift_2 = 0;
+        kappa = p(0), sigma=p(1);
+        drift = kappa - Type(0.5)*sigma*sigma;
+        drift_1 = Type(0), drift_2 = Type(0);
         diffusion = sigma;
-        diffusion_1 = 0, diffusion_2 = 0;
+        diffusion_1 = Type(0), diffusion_2 = Type(0);
         break;
     }
     
-    deriv[0]=drift,    deriv[1]=drift_1,    deriv[2]=drift_2;
-    deriv[3]=diffusion, deriv[4]=diffusion_1, deriv[5]=diffusion_2;
+    deriv(0)=drift,    deriv(1)=drift_1,    deriv(2)=drift_2;
+    deriv(3)=diffusion, deriv(4)=diffusion_1, deriv(5)=diffusion_2;
     return deriv;
     
 }
