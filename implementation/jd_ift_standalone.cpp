@@ -86,7 +86,6 @@ cType<Type> logcf(cType<Type> s, Type x0, Type dt, vector<Type> par, int process
 
 template<class Type>
 struct logcf_f{
-    //cType<Type>& s;
     Type x0, dt;
     vector<Type> par;
     int process, scheme, jump;
