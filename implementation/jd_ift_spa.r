@@ -29,14 +29,15 @@ if(simulate){
     seed = 123
     X <- GBM_process(time, N, mu, sigma, x0, seed)
     par_true <- c(mu,sigma)
-    data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=2)
+    data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=3)
     plot(X, type="l", main="Simulated GBM")
 }
 
-par_diff <- c(kappa=0.1,sigma=0.2)
+par_diff <- c(0.1,0.2)
 par_jump <- c()
 param <- list(par = c(par_diff,par_jump))
 obj <- MakeADFun(data, param)
+obj$fn(obj$par)
 opt <- nlminb(obj$par, obj$fn, obj$gr, obj$he, control=list(trace=1))
 res <- sdreport(obj)
 res

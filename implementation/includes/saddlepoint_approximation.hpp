@@ -38,7 +38,7 @@ struct spa_iprob{
 template<class Type, class Functor>
 Type lspa(Functor inner_problem, vector<Type> s) {
     matrix<Type> H = autodiff::hessian(inner_problem, s); // Hessian of inner problem equals that of the cgf
-    Type lspa = inner_problem(s) - log(sqrt(Type(2)*M_PI*exp(atomic::logdet(H))));
+    Type lspa = inner_problem(s) - Type(0.5)*(log(Type(2)*M_PI)+atomic::logdet(H));//log(sqrt(Type(2)*M_PI*exp(atomic::logdet(H))));
     return lspa;
 }
 

@@ -5,13 +5,12 @@
  */
 
 #include<TMB.hpp>
-#include<fenv.h>
 #include "includes/itift.hpp"
 
 /* objective function */
 template<class Type>
 Type objective_function<Type>::operator()(){
-    feenableexcept(FE_INVALID | FE_OVERFLOW | FE_DIVBYZERO | FE_UNDERFLOW); // Extra line needed
+
     // Data
     DATA_VECTOR(X)
     DATA_SCALAR(dt);
@@ -26,19 +25,21 @@ Type objective_function<Type>::operator()(){
     int nobs=X.size(), j;
     Type nll = 0;
     vector<Type> s(1);
-    //s.setOnes();
-    s(0) = Type(10);
+    vector<Type> deriv(6);
     
     // Create inner problem
     spa_iprob<Type> iprob(X(1), X(0), dt, par, process, scheme, jump);
     
+    // Build nll from spa
     for(j=1; j<nobs; j++){
         iprob.set_x0(X(j-1));
         iprob.set_x( X(j) );
+        deriv = differentials_diff(X(j-1), dt, par, process);
+        s(0) = (X(j) - X(j-1) - deriv(0)*dt) / (deriv(3)*deriv(3)*dt); // start at spa for Normal approximation
         s(0) = newton_local_extrema(iprob, s, niter);
         nll -= lspa(iprob, s);
     }
-    
+
     return nll;
-    
+
 }
