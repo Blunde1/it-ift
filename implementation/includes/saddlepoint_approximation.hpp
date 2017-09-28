@@ -12,10 +12,15 @@ struct spa_iprob{
     Type x, x0, dt;
     vector<Type> par;
     int process, scheme, jump;
+    
     spa_iprob(Type x_, Type x0_, Type dt_, vector<Type> par_, 
               int process_, int scheme_, int jump_) : 
         x(x_), x0(x0_), dt(dt_), par(par_), process(process_), 
         scheme(scheme_), jump(jump_) {}
+    
+    spa_iprob(const spa_iprob& iprob) : 
+        x(iprob.x), x0(iprob.x0), dt(iprob.dt), par(iprob.par), 
+        process(iprob.process), scheme(iprob.scheme), jump(iprob.jump) {}
     
     void set_x0(Type x0) { this -> x0 = x0; }
     
@@ -27,6 +32,14 @@ struct spa_iprob{
         T cgf = cgf_fun(s(0), T(x0), T(dt), p,
                         (int)process, (int)scheme, (int)jump);
         return cgf - s(0)*T(x);
+    }
+    template<typename T>
+    cType<T> operator()(cType<T> s){
+        vector<T> p = par.template cast<T>();
+        cType<T> res, i(0,1);
+        res = log_cf_fun(-i*s, T(x0), T(dt), p, 
+                         (int)process, (int)scheme, (int)jump);
+        return res - s*T(x);
     }
 };
 
