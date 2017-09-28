@@ -20,7 +20,7 @@ simulate = TRUE
 if(simulate){
     source("simulation/Simulation_GBM.R")
     set.seed(123)
-    time = 10
+    time = 1000
     N=12*time
     mu = 0.1
     sigma = 0.2
@@ -33,7 +33,7 @@ if(simulate){
     plot(X, type="l", main="Simulated GBM")
 }
 
-par_diff <- c(0.1,0.2)
+par_diff <- c(0.2,0.1)
 par_jump <- c()
 param <- list(par = c(par_diff,par_jump))
 obj <- MakeADFun(data, param)
