@@ -8,7 +8,7 @@ simulate = TRUE
 if(simulate){
     source("simulation/Simulation_GBM.R")
     set.seed(123)
-    time = 10
+    time = 100
     N=12*time
     mu = 0.1
     sigma = 0.2
@@ -17,7 +17,7 @@ if(simulate){
     seed = 123
     X <- GBM_process(time, N, mu, sigma, x0, seed)
     par_true <- c(mu,sigma)
-    data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=3, qhiter=50)
+    data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=3, qhiter=40)
     plot(X, type="l", main="Simulated GBM")
 }
 

@@ -5,7 +5,6 @@
  */
 
 #include<TMB.hpp>
-#include<fenv.h>
 #include "includes/itift.hpp"
 
 template<class Type>
@@ -23,7 +22,7 @@ struct lcf_standardized{
         vector<T> sp_ = sp.template cast<T>();
         matrix<T> H = autodiff::hessian(iprob, sp_);
         cType<T> res, i(0,1);
-        res = -iprob(sp_)+sp_(0)*x_  - i*s*x_ / sqrt(abs(H(0,0))) + 
+        res = -(iprob(sp_)+sp_(0)*x_)  - i*s*x_ / sqrt(abs(H(0,0))) + 
             iprob(
                 sp_(0) + s*i / sqrt(abs(H(0,0)))
             )
@@ -35,8 +34,7 @@ struct lcf_standardized{
 /* objective function */
 template<class Type>
 Type objective_function<Type>::operator()(){
-    feenableexcept(FE_INVALID | FE_OVERFLOW | FE_DIVBYZERO | FE_UNDERFLOW); // Extra line needed
-    
+
     // Data
     DATA_VECTOR(X)
     DATA_SCALAR(dt);
@@ -50,7 +48,7 @@ Type objective_function<Type>::operator()(){
     PARAMETER_VECTOR(par); // jump diffusion parameters
     
     int nobs=X.size(), j;
-    Type nll = 0, fx, fx_standardized;
+    Type nll = 0, lfx, fx_standardized;
     vector<Type> s(1), deriv(6);
     
     // Qaadrature rules    
@@ -75,9 +73,9 @@ Type objective_function<Type>::operator()(){
         fx_standardized = ift_gauher(Type(0), lphi_01, rules);
         //REPORT(fx_standardized);
         // Calculate exact spa
-        fx = iprob(s) + log(fx_standardized) - 
+        lfx = iprob(s) + log(fx_standardized) - 
             Type(0.5)*atomic::logdet(autodiff::hessian(iprob,s));
-        nll -= log(fx);
+        nll -= lfx;
     }
     
     return nll;
