@@ -96,5 +96,53 @@ Type cgf_fun(Type s, Type x0, Type dt, vector<Type> p, int process_type, int sch
     return cgf;
 }
 
+/* cgf struct */
+template<class Type>
+struct cgf_s{
+    
+    // Member
+    Type x0, dt;
+    vector<Type> par;
+    int process, scheme, jump;
+    
+    // Constructors
+    cgf_s(Type x0_, Type dt_, vector<Type> par_, int process_, int scheme_, int jump_) : 
+        x0(x0_), dt(dt_), par(par_), process(process_), scheme(scheme_), jump(jump_) {}
+    cgf_s(const cgf_s& cf) : 
+        x0(cf.x0), dt(cf.dt), par(cf.par), process(cf.process), scheme(cf.scheme), jump(cf.jump) {}
+    
+    // Set methods
+    void set_x0(Type x0) { this -> x0 = x0; }
+    
+    // Operators
+    template<typename T>
+    T operator()(T s){
+        T dt_ = T(dt);
+        T x0_ = T(x0);
+        vector<T> p_ = par.template cast<T>();
+        T cgf = cgf_fun(s, x0_, dt_, p_, (int)process, (int)scheme, (int)jump);
+        return cgf;
+    }
+    template<typename T>
+    T operator()(vector<T> s){
+        T dt_ = T(dt);
+        T x0_ = T(x0);
+        vector<T> p_ = par.template cast<T>();
+        T cgf = cgf_fun(s(0), x0_, dt_, p_, (int)process, (int)scheme, (int)jump);
+        return cgf;
+    }
+    template<typename T>
+    cType<T> operator()(cType<T> s){
+        T dt_ = T(dt);
+        T x0_ = T(x0);
+        vector<T> p_ = par.template cast<T>();
+        cType<T> res, i(0,1);
+        res = log_cf_fun(-i*s, x0_, dt_, p_, 
+                         (int)process, (int)scheme, (int)jump);
+        return res;
+    }
+    
+};
+
 
 #endif //__generating_functions_hpp_included__
