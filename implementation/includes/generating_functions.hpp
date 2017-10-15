@@ -53,7 +53,7 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int proc
         lcf = lcf; // Nothing happens
         break;
     case 1: // Normally distirbuted jumps
-        lambda = p[p_size-3], mu = p[p_size-2], nu = p[p_size-1];
+        lambda = p(p_size-3), mu = p(p_size-2), nu = p(p_size-1);
         lcf = lcf + lambda*dt*(exp(s*i*mu - ((Type)0.5)*nu*nu*s*s)- (Type)1);
         break;
     case 2: // Gamma distributed jumps

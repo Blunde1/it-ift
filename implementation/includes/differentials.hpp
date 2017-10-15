@@ -43,6 +43,15 @@ vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, int process_ty
         diffusion = sigma;
         diffusion_1 = Type(0), diffusion_2 = Type(0);
         break;
+    case 3:
+        /* log Merton jump-diffusion */
+        kappa=p(0), sigma=p(0), lambda=p(2), mu=p(3), nu=p(4);
+        k = exp(mu+Type(0.5)*nu*nu) - Type(1);
+        drift = kappa - lambda*k - Type(0.5)*sigma*sigma;
+        diffusion = sigma;
+        drift_1 = Type(0), drift_2 = Type(0);
+        diffusion_1 = Type(0), diffusion_2 = Type(0);
+        break;
     }
     
     deriv(0)=drift,    deriv(1)=drift_1,    deriv(2)=drift_2;
