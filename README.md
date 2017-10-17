@@ -8,12 +8,12 @@ The R package builds a [TMB](https://github.com/kaskr/adcomp) program, depending
 The package is currently in development.
 
 # Usage
-Create `DATA` and `PARAMETER` lists, following TMB conventions.
+Create ```DATA``` and ```PARAMETER``` lists, following TMB conventions.
 
-* The `DATA$X` vector contains the descrete observations of the jump diffusion
-* The `DATA$process`integer specifies the integer valued `process`. See lists of processes and corresponding `process` values.
-* The `DATA$dt` scalar specifies the equidistant timesteps.
-* The `PARAMETER$par` object corresponds to the `DATA$process` value.
+* The ```DATA$X``` vector contains the descrete observations of the jump diffusion
+* The ```DATA$process```integer specifies the integer valued ```process```. See lists of processes and corresponding ```process``` values.
+* The ```DATA$dt``` scalar specifies the equidistant timesteps.
+* The ```PARAMETER$par``` object corresponds to the ```DATA$process``` value.
 
 # Advanced notes
 Information to come regarding:
