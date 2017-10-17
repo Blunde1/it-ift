@@ -26,7 +26,7 @@ Type ift_gauher(Type x, Functor f, matrix<Type> rules){
 template<class Type, class Functor>
 Type ift_gaulag(Type x, Functor f, matrix<Type> quadRules){
     cType<Type> i(0,1);
-    Type sum = 0; 
+    Type sum = Type(0); 
     int n = quadRules.rows();
     vector<Type> ai = quadRules.col(0);
     vector<Type> w = quadRules.col(1);
