@@ -54,6 +54,7 @@ Type objective_function<Type>::operator()(){
             s(0) = newton_local_extrema(iprob, s, niter, alpha); // start Newton with 0
         }else{
             s(0) = line_search_newton(iprob, s, alpha, niter);
+            s(0) = newton_local_extrema(iprob, s, 2, alpha); // Do two more Newton.. should not be necessary...
         }
         // Create standardized lcf
         lcf_standardized<Type> lphi_01(cgf, X(j), s);
