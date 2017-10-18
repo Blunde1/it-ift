@@ -31,9 +31,10 @@ if(simulate){
         seed = 123
         X <- GBM_process(time, N, mu, sigma, x0, seed)
         par_true <- c(mu,sigma)
-        par_diff <- c(mu,sigma)
+        par_diff <- c(mu+0.5,sigma/10)
         par_jump <- numeric(0)
-        data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=3, ghiter=30)
+        param <- list(par=par_diff)
+        data <- list(X=log(X), dt=1/12, process=2, scheme=1, jump=0, niter=3, ghiter=30, line_search=1)
         plot(X, type="l", main="Simulated GBM")
     }
     if(mjd){
@@ -43,7 +44,7 @@ if(simulate){
         N=250*time
         r = 0.55
         sigma = 0.2
-        lambda = 18
+        lambda = 30
         mu=-0.01
         nu=0.04
         x0 = 1
@@ -54,7 +55,7 @@ if(simulate){
         par_diff <- c(r,sigma)
         par_jump <- c(lambda,mu,nu)
         param <- list(par=c(par_diff, par_jump))
-        data <- list(X=log(X$x), dt=dt, process=3, scheme=1, jump=1, niter=50, ghiter=32,alpha=1)
+        data <- list(X=log(X$x), dt=dt, process=3, scheme=1, jump=1, niter=50, ghiter=180, line_search=1)
     }
 }
 
@@ -64,8 +65,11 @@ if(simulate){
 #par_jump <- c(30,0,0.05)
 #param <- list(par = c(par_diff,par_jump))
 # data and param are set during simulation
+# Works for real data!
 obj <- MakeADFun(data, param)
 obj$fn(obj$par)
+obj$gr(obj$par)
+obj$he(obj$par)
 opt <- nlminb(obj$par, obj$fn, obj$gr, obj$he, control=list(trace=1))
 obj$fn(opt$par)
 res <- sdreport(obj)
@@ -75,9 +79,9 @@ res
 # Part 3. Transition density plotting
 td_settings <- TRUE
 if(td_settings){
-    r = 0.4
+    r = 0.2
     sigma = 0.3
-    lambda = 10
+    lambda = 100
     mu=-0.01
     nu=0.05
     x0 = 0
@@ -85,7 +89,7 @@ if(td_settings){
     par_diff <- c(r,sigma)
     par_jump <- c(lambda,mu,nu)
     param <- list(par=c(par_diff, par_jump))
-    data <- list(X=numeric(2), dt=dt, process=3, scheme=1, jump=1, niter=50, ghiter=180,alpha=1)
+    data <- list(X=numeric(2), dt=dt, process=3, scheme=1, jump=1, niter=50, ghiter=180)
 }
 x_vals <- seq(-0.09, 0.09, by=0.001)
 y_vals <- numeric(length(x_vals))

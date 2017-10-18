@@ -20,13 +20,13 @@ Type objective_function<Type>::operator()(){
     DATA_INTEGER(jump);
     DATA_INTEGER(niter);
     DATA_INTEGER(ghiter);
-    DATA_SCALAR(alpha);
+    DATA_INTEGER(line_search);
     
     // Parameters
     PARAMETER_VECTOR(par); // jump diffusion parameters
     
     int nobs=X.size(), j;
-    Type nll = 0, lfx=0;
+    Type nll = 0, lfx=0, alpha=Type(1);
     vector<Type> s(1), deriv(6);
     s.setZero();
     
@@ -50,7 +50,11 @@ Type objective_function<Type>::operator()(){
         // Solve inner problem
         //deriv = differentials_diff(X(j-1), dt, par, process);
         //s(0) = (X(j) - X(j-1) - deriv(0)*dt) / (deriv(3)*deriv(3)*dt); // start at spa for Normal approximation
-        s(0) = newton_local_extrema(iprob, s, niter, alpha); // start Newton with 0
+        if(line_search == 0){
+            s(0) = newton_local_extrema(iprob, s, niter, alpha); // start Newton with 0
+        }else{
+            s(0) = line_search_newton(iprob, s, alpha, niter);
+        }
         // Create standardized lcf
         lcf_standardized<Type> lphi_01(cgf, X(j), s);
         // Calculate log exact spa
