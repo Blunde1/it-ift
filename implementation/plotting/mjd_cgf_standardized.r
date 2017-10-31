@@ -1,33 +1,24 @@
-# Program for plotting the cgf of a Merton Jump Diffusion
+# Program for inspacting the cgf of a Merton Jump Diffusion
+
+param <- c("r"=0.03,"sigma"=0.2,"lambda"=1,"mu"=-0.5,"nu"=0.1, "x0"=0, "t"=1/4)
 
 # K
-
-# K'
-
-# K''
-
-# s.hat (spa)
-
-# phi.stand
-
-# plot phi.stand / sqrt(2*pi), versus standard normal
-
-# Plot aeld(exp(-x^2) and phi.stand change of variable)
-
-# K
-mjd.cgf <- function(s, r=0.03,sigma=0.2,lambda=1,mu=-0.5,nu=0.1, x0=1, t=1/4){
+mjd.cgf <- function(s, r=param["r"],sigma=param["sigma"],lambda=param["lambda"],
+                    mu=param["mu"],nu=param["nu"], x0=param["x0"], t=param["t"]){
     k = exp(mu+0.5*nu^2) - 1
     s*x0 + s*t*(r-lambda*k-sigma^2/2) + s^2*sigma^2*t/2 +
         lambda*t*(exp(s*mu+s^2*nu^2/2)-1)
 }
 # K'
-mjd.cgf.1 <- function(s, r=0.03,sigma=0.2,lambda=1,mu=-0.5,nu=0.1, x0=1, t=1/4){
+mjd.cgf.1 <- function(s, r=param["r"],sigma=param["sigma"],lambda=param["lambda"],
+                      mu=param["mu"],nu=param["nu"], x0=param["x0"], t=param["t"]){
     k = exp(mu+0.5*nu^2) - 1
     x0+t*(r-lambda*k-sigma^2/2) + s*sigma^2*t + 
         (mu+nu^2*s) * lambda*t*exp(s*mu+s^2*nu^2/2)
 }
 # K''
-mjd.cgf.2 <- function(s, r=0.03,sigma=0.2,lambda=1,mu=-0.5,nu=0.1, x0=1, t=1/4){
+mjd.cgf.2 <- function(s, r=param["r"],sigma=param["sigma"],lambda=param["lambda"],
+                      mu=param["mu"],nu=param["nu"], x0=param["x0"], t=param["t"]){
     k = exp(mu+0.5*nu^2) - 1
     sigma^2*t + lambda*t*exp(s*mu+s^2*nu^2/2) * (nu^2+(mu+nu^2*s)^2)
 }
@@ -141,8 +132,8 @@ spa2 <- sapply(x, function(x){
 p.0.x <- sapply(x, p.0)
 
 plot(x,spa1, ylim=c(0,4), type="l")
-plot(x, spa2)
-plot(x,spa1*p.0.x, type="l")
+lines(x, spa2, col="red")
+lines(x,spa1*p.0.x, type="l", col="blue")
 
 # Test for finding spa
 x <- 10
