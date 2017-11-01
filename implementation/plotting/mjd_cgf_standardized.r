@@ -53,28 +53,75 @@ cgf.stand <- function(s, x, cgf=mjd.cgf, cgf.1=mjd.cgf.1, cgf.2=mjd.cgf.2){
 cgf.stand(0,10)
 check <- nlminb(10, cgf.stand, x=100)$par
 s <- seq(-6,6, length.out = 100)
-y.cgf <- sapply(s, cgf.stand, x=12)
+y.cgf <- sapply(s, cgf.stand, x=10)
 plot(s,y.cgf, type="l")
 
 # plot phi.stand / sqrt(2*pi), versus standard normal
-u <- seq(-6,6,0.01)
-y <- sapply(u, function(u){Re(phi.stand(u, x=10))/(sqrt(2*pi))})
-plot(u,y, type="l")
+u <- seq(-10,10,0.01)
+y <- sapply(u, function(u){Re(phi.stand(u, x=0))/(sqrt(2*pi))})
+plot(u,y, type="l", ylim=c(min(y), max(y)), col="1", lwd=2, lty=2, xlab="s", ylab=expression(paste(varphi[hat(x)(tilde(tau))](s))))
 lines(u, dnorm(u,0,1),col="red")
+lines(u, abs(dnorm(u,0,1, log = TRUE) - log(y)), col="blue")
 legend("topright", legend=c("mjd standardized", "standard normal"), col=c("black", "red"), lty=c(1,1))
+
+##### PLOTTING W.R.T. S
+pdf("mjd_stand_s.pdf", width=7, height=4+1/3)
+
+par(mar=c(5,6, 3, 3))
+plot(u, y, xaxt="n", yaxt="n", ylim=c(min(y), max(y)), 
+     , main="", type="l", col="1", lwd=2, lty=2,
+     ylab=expression(paste(Re,"[", varphi[hat(x)(tilde(tau))](s),"]")),
+     xlab = expression(paste(s)))
+lines(u, dnorm(u,0,1), col=2, lwd=2, lty=2)
+axis(2, ylim=c(0, max(y)), col="black", lwd=1, las=1)
+axis(1,ylab=expression(s))
+legend("topright", legend=c("MJD standardised", "Standard normal"), col=c("black", "red"), lty=c(2,2))
+
+dev.off()
+
+
+
+##### PLOTTING W.R.T. X
+
 
 # as a function of x
 p.0 <- function(x){
-    u <- seq(-6,6,0.05)
-    y <- sapply(u, function(u){Re(phi.stand(u, x))/(sqrt(2*pi))})
+    u <- seq(-10,10,0.02)
+    y <- sapply(u, function(u){Re(phi.stand(u, x))/(2*pi)})
     sum(y)*(u[2]-u[1])
 }
 mjd.e <- mjd.cgf.1(0)
 mjd.v <- mjd.cgf.2(0)
-x <- seq(mjd.e - 2.5*sqrt(mjd.v), mjd.e+2.5*sqrt(mjd.v), length.out = 100)
+x <- seq(mjd.e - 9*sqrt(mjd.v), mjd.e+2*sqrt(mjd.v), length.out = 200)
 p.0.x <- sapply(x, p.0)
 plot(x, p.0.x,type="l")
+spa <- function(sp, x, cgf=mjd.cgf, cgf.2=mjd.cgf.2){
+    exp(cgf(sp)-sp*x) / sqrt(2*pi*cgf.2(sp))
+}
+spa1 <- sapply(x, function(x){
+    sp <- s.hat.fn(0,x)
+    spa(sp, x)
+})
 
+pdf("mjd_prob_x.pdf", width=7, height=4+1/3)
+par(mar=c(5,6, 3, 6))
+plot(x, spa1, xaxt="n", yaxt="n", ylim=c(0, max(spa1*p.0.x*sqrt(2*pi))), 
+     , main="", type="l", col="1", lwd=2, lty=2,
+     ylab=expression(paste("Spa(f;x)")),
+     xlab = expression(paste(x)))
+lines(x, spa1*p.0.x*sqrt(2*pi), col=2, lwd=2, lty=2)
+axis(2, ylim=c(0, max(spa1*p.0.x*sqrt(2*pi))), col="black", lwd=1, las=1)
+axis(1)
+par(new=T)
+plot(x, p.0.x, axes=F, xlab="", ylab="", main="", type="l", col=4, lty=2, lwd=1.5)
+axis(4, ylim=c(min(p.0.x), max(p.0.x)))
+mtext(4, text=expression(paste(
+    p[bar(X)(hat(tau))](0)
+)), line=3)
+
+legend("topleft", legend=c("Orindary spa", "Exact", "Probability in zero"), col=c("black", "red", 4), 
+       lty=c(2,2, 2), lwd=c(2,2, 1.5))
+dev.off()
 
 # Plot aeld(exp(-x^2) and phi.stand change of variable)
 
