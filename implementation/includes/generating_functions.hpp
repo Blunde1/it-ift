@@ -53,13 +53,19 @@ cType<Type> log_cf_fun(cType<Type> s, Type x0, Type dt, vector<Type> p, int proc
         lcf = lcf; // Nothing happens
         break;
     case 1: // Normally distirbuted jumps
-        lambda = p(p_size-3), mu = p(p_size-2), nu = p(p_size-1);
+        lambda = exp(p(p_size-3)), mu = p(p_size-2), nu = exp(p(p_size-1));
         lcf = lcf + lambda*dt*(exp(s*i*mu - ((Type)0.5)*nu*nu*s*s)- (Type)1);
         break;
     case 2: // Gamma distributed jumps
         lambda = p[p_size-3], mu = p[p_size-2], nu = p[p_size-1];
         // mu>0: shape, nu>0: scale
         lcf = lcf + lambda*dt*(pow(((Type)1 - nu*i*s), -mu) - (Type)1);
+        break;
+    case 11: // Zero-truncated compounded Poisson - Normally distributed jumps
+        lambda = exp(p(p_size-3)), mu = p(p_size-2), nu = exp(p(p_size-1));
+        lcf = lcf + lambda * dt * ( exp( s*i*mu - Type(0.5)*nu*nu*s*s) - Type(1) + 
+            log(Type(1) - exp(-lambda*dt*exp(s*i*mu - Type(0.5)*nu*nu*s*s) )) - 
+            log(Type(1) - exp(-lambda*dt)) );
     }
     
     return lcf;

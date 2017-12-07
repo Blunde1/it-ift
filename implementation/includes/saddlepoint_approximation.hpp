@@ -90,7 +90,8 @@ Type log_exact_spa(Type x, cgf_s<Type> cgf, vector<Type> sp,
                lcf_standardized<Type> lcf_stand, matrix<Type> rules){
     Type lfx, fx_standardized;
     // Invert to obtain standardized density
-    fx_standardized = ift_gauher(Type(0), lcf_stand, rules);
+    //fx_standardized = ift_gauher(Type(0), lcf_stand, rules);
+    fx_standardized = ift_gh_scaled0(lcf_stand, rules);
     
     // Calculate exact spa
     lfx = cgf(sp) - sp(0)*x + log(fx_standardized) - 

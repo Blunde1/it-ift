@@ -45,7 +45,7 @@ vector<Type> differentials_diff(Type x0, Type dt, vector<Type> p, int process_ty
         break;
     case 3:
         /* log Merton jump-diffusion */
-        kappa=p(0), sigma=p(1), lambda=p(2), mu=p(3), nu=p(4);
+        kappa=p(0), sigma=exp(p(1)), lambda=exp(p(2)), mu=p(3), nu=exp(p(4));
         k = exp(mu+Type(0.5)*nu*nu) - Type(1);
         drift = kappa - lambda*k - Type(0.5)*sigma*sigma;
         diffusion = sigma;
