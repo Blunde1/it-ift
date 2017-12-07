@@ -8,7 +8,7 @@ Type newton_local_extrema(Functor f, vector<Type> s, int niter, Type alpha) {
     //Min/maximize f
     vector<Type> g, s_old=s, s_new(1);
     matrix<Type> H;
-    Type EPS = 1.0e-3;
+    //Type EPS = 1.0e-3;
     for (int i = 0; i<niter; i++) {
         g = autodiff::gradient(f, s_old); 
         H = autodiff::hessian(f, s_old); 
@@ -50,7 +50,7 @@ Type line_search_newton(Functor f, vector<Type> start, Type& alpha, int maxniter
         
         if (abs(s_new(0)-s_old(0))<= EPS){
             break;
-        } else if(f(s_new) <= f(s_old) + f_eps){
+        } else if(f(s_new) <= (f(s_old) + f_eps) ){
             s_old = s_new;
         } else{ // reset with smaller alpha
             alpha = 0.9*alpha;

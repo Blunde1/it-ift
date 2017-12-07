@@ -21,6 +21,23 @@ Type ift_gauher(Type x, Functor f, matrix<Type> rules){
     return sum;
 }
 
+/** Scaled Gauss hermite fourier transfomr from lcf to density. lcf takes s, ls0, v0, as argument
+ */
+template<class Type, class Functor>
+Type ift_gh_scaled0(Functor f, matrix<Type> rules){
+    cType<Type> i(0,1);
+    Type sum=Type(0);
+    int n = (rules.rows()+1) / 2; // symmetric roots and real part of integrand about origin
+    vector<Type> ai = rules.col(0);
+    vector<Type> ai_scaled = sqrt(Type(2))*ai;
+    vector<Type> w = rules.col(1);
+    for(int j=0; j<n; j++){
+        sum += w(j)*real(exp(f(cType<Type>(ai_scaled(j))) + ai(j)*ai(j) ));
+    }
+    sum = sum * sqrt(Type(2)) / ((Type)(M_PI));
+    return sum;
+}
+
 /** Gauss laguerre fourier transformation from logarithmich characteristic function to density function 
  */
 template<class Type, class Functor>
